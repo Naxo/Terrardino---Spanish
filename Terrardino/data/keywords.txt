@@ -1,0 +1,16 @@
+Button	KEYWORD1
+ButtonText	KEYWORD1
+
+setText KEYWORD2
+setBackgroundColor KEYWORD2
+setFrontColor KEYWORD2
+setBorderColor KEYWORD2
+setFontSize KEYWORD2
+setPosition KEYWORD2
+getText KEYWORD2
+getBackgroundColor KEYWORD2
+getFrontColor KEYWORD2
+getBorderColor KEYWORD2
+getFontSize KEYWORD2
+print KEYWORD2
+pushed KEYWORD2
