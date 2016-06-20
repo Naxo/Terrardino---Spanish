@@ -66,6 +66,4 @@ void processMyTouch() {
         break;
     }
   }
-
-  delay(75);
 }

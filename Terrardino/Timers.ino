@@ -13,36 +13,36 @@ void checkRainTimers() {
 
   // Restart global rain flag
   rainOn = false;
-  
+
   for (int i = 0; i < 15; i++) {
     timeCurrent = rtc.getTime();
 
     int isEnabled = rainSettings.arrayRain[i].rainEnabled;
 
-    if ((isEnabled == 1) && (bitRead(isRainTimerModify, i) == false))
+    if ((isEnabled == 1) && isRainTimerModify[i] == false)
     {
       if (getIntSeconds(rainSettings.arrayRain[i].offHour, rainSettings.arrayRain[i].offMinute, rainSettings.arrayRain[i].offSecond) > getIntSeconds(rainSettings.arrayRain[i].onHour, rainSettings.arrayRain[i].onMinute, rainSettings.arrayRain[i].onSecond))
       {
         if ((getIntSeconds(timeCurrent.hour, timeCurrent.min, timeCurrent.sec) >= getIntSeconds(rainSettings.arrayRain[i].onHour, rainSettings.arrayRain[i].onMinute, rainSettings.arrayRain[i].onSecond))
             && (getIntSeconds(timeCurrent.hour, timeCurrent.min, timeCurrent.sec) <= getIntSeconds(rainSettings.arrayRain[i].offHour, rainSettings.arrayRain[i].offMinute, rainSettings.arrayRain[i].offSecond)))
         {
-          bitWrite(isRainOn, i, 1);
+          isRainOn[i] = true;
         }
         if (getIntSeconds(timeCurrent.hour, timeCurrent.min, timeCurrent.sec) > getIntSeconds(rainSettings.arrayRain[i].offHour, rainSettings.arrayRain[i].offMinute, rainSettings.arrayRain[i].offSecond))
         {
-          bitWrite(isRainOn, i, 0);
+          isRainOn[i] = false;
         }
       }
     }
     else
     {
-      bitWrite(isRainOn, i, 0);
-      bitWrite(isRainTimerModify, i, 0);
+      isRainOn[i] = false;
+      isRainTimerModify[i] = false;
     }
   }
-  
+
   for (int i = 0; i < 15; i++) {
-    rainOn = rainOn || bitRead(isRainOn, i);
+    rainOn = rainOn || isRainOn[i];
   }
 
   if (rainOn) {
@@ -52,5 +52,5 @@ void checkRainTimers() {
     digitalWrite(onOffRain, HIGH);
     rainSettingsButton.image = Rain_off_icon;
   }
-  
+
 }

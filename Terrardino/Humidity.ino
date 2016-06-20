@@ -1,8 +1,8 @@
 /**************************** HUMIDITY SCREEN ****************************************/
 void humidityScreen(boolean refreshAll = false) {
-  
+
   if (refreshAll) {
-    
+
     if ((setHumTerrarium == 0)) {
       setHumTerrarium = 80.0;
     }
@@ -12,7 +12,7 @@ void humidityScreen(boolean refreshAll = false) {
     printLineSeparator();
 
     printButtonCommon();
-    
+
     setFont(SMALL, blackColor, whiteColor);
     myGLCD.print("Humedad a mantener en terrario (%):", 20, 34);
 
@@ -23,7 +23,7 @@ void humidityScreen(boolean refreshAll = false) {
     offsetPlus.print();
     offsetMinus.print();
   }
-  
+
   setFont(LARGE, blackColor, whiteColor);
   myGLCD.printNumF(setHumTerrarium, 1, CENTER, 54);
   myGLCD.printNumF(offHumTerrarium, 1, CENTER, 104);
@@ -32,18 +32,23 @@ void humidityScreen(boolean refreshAll = false) {
 /**************************** HUMIDITY SCREEN END *******************************/
 
 void checkHumidity() {
+
   humidityTerrarium = dht.readHumidity();
 
-  float humedadLimit = setHumTerrarium + offHumTerrarium;
-  if (humedadLimit > 100.0) {
-    humedadLimit = 100.0;
+  float humidityLimit = setHumTerrarium - offHumTerrarium;
+
+  if (humidityLimit > 100.0) {
+    humidityLimit = 100.0;
+  } else if (humidityLimit < 0 ) {
+    humidityLimit = 0.0;
   }
 
-  if (humidityTerrarium > (humedadLimit)) {
-    isCoolerOnOff = true;
+
+  if (humidityTerrarium > (setHumTerrarium)) {
+    isCoolerOn = true;
     digitalWrite(onOffFanPin, LOW);
-  } else {
-    isCoolerOnOff = false;
+  } else if (humidityTerrarium < humidityLimit ) {
+    isCoolerOn = false;
     digitalWrite(onOffFanPin, HIGH);
   }
 }

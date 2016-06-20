@@ -145,7 +145,7 @@ void processRainScreen() {
   rainOnDown.print();
   rainOffUP.print();
   rainOffDown.print();
-  backButton.setInitPosition(10,200);
+  backButton.setInitPosition(10, 200);
   backButton.print();
 
   // Init Hour ON/OFF Box how selected
@@ -153,7 +153,7 @@ void processRainScreen() {
   rainOffIndex = 0;
 
   // Rain timmer set to modify
-  bitWrite(isRainTimerModify, rainIndexButton, 1);
+  isRainTimerModify[rainIndexButton] = true;
 
   printHoursRain(true);
 
@@ -206,7 +206,7 @@ void processRainSetupScreen() {
   if (saveButton.pushed(x, y)) {
     // If save and exit, set all timer to active (not modified more)
     for (int i = 0; i < 15; i++) {
-      bitWrite(isRainTimerModify, i, 0);
+      isRainTimerModify[i] = false;
     }
     cleanScreen();
     saveRainToEEPROM();
@@ -217,17 +217,17 @@ void processRainSetupScreen() {
     cleanScreen();
     // If exit, set all timer to active (not modified more)
     for (int i = 0; i < 15; i++) {
-      bitWrite(isRainTimerModify, i, 0);
+      isRainTimerModify[i] = false;
     }
     dispScreen = 1;
     rainScreen();
   } else if (cancelButton.pushed(x, y)) {
-  
+
     // If save and exit, set all timer to active (not modified more)
     for (int i = 0; i < 15; i++) {
-      bitWrite(isRainTimerModify, i, 0);
+      isRainTimerModify[i] = false;
     }
-    
+
     goToMainScreen();
 
   } else if (onRain.pushed(x, y)) {

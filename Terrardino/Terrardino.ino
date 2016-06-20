@@ -86,11 +86,10 @@ extern unsigned int Save_icon[900];
 extern unsigned int Cancel_icon[900];
 extern unsigned int About_icon[625];
 
-// Rain bytes
-// bit 1 a 15
-byte isRainOn = 0x0; // 1 = true e 0 = false
-// bit 1 a 15
-byte isRainTimerModify = 0x0; // 1 = true e 0 = false
+// Rain booleans
+boolean isRainOn[15];
+
+boolean isRainTimerModify[15];
 
 // Rain flag --> The logic result of sum all rain flags
 // 1 if some raintimer is on. 0 if all rainTimers are off.
@@ -104,9 +103,9 @@ float offHumTerrarium = 0.0;
 float setTempTerrarium = 0.0;
 float offTempTerrarium = 0.0;
 
-boolean isCoolerOnOff = false;
+boolean isCoolerOn = false;
 
-boolean isHeaterOnOff = false;
+boolean isHeaterOn = false;
 
 // Refresh counter
 long previousMillis = 0;
@@ -120,7 +119,7 @@ RGB redColor{255, 0, 0};
 RGB blueColor{9, 184, 255};
 RGB blueCleanColor{0, 0, 255};
 RGB greyColor {176, 176, 176};
-RGB yellowColor {255, 128, 0};
+RGB orangeColor {255, 128, 0};
 
 /***************************** DECLARED BUTTONS *********************************/
 
@@ -228,11 +227,11 @@ void saveHumiditytoEEPROM() {
 void saveTempToEEPROM() {
   temperatureSettings.tempset = int(setTempTerrarium * 10);
   temperatureSettings.tempoff = int(offTempTerrarium * 10);
-  EEPROM_writeAnything(640, temperatureSettings);
+  EEPROM_writeAnything(629, temperatureSettings);
 }
 
 void saveRainToEEPROM() {
-  EEPROM_writeAnything(660, rainSettings);
+  EEPROM_writeAnything(634, rainSettings);
 }
 
 void readFromEEPROM() {
@@ -245,14 +244,14 @@ void readFromEEPROM() {
   offHumTerrarium = humiditySettings.humedadOffset;
   offHumTerrarium /= 10;
 
-  EEPROM_readAnything(640, temperatureSettings);
+  EEPROM_readAnything(629, temperatureSettings);
   setTempTerrarium = temperatureSettings.tempset;
   setTempTerrarium /= 10;
   offTempTerrarium = temperatureSettings.tempoff;
   offTempTerrarium /= 10;
 
-  EEPROM_readAnything(660, rainSettings);
-  //  EEPROM_readAnything(750, nextSetting);
+  EEPROM_readAnything(634, rainSettings);
+  //  EEPROM_readAnything(845, nextSetting);
 
 }
 /***************************** END OF EEPROM FUNCTIONS ********************************/
@@ -381,7 +380,7 @@ void setFont(boolean font, RGB backColor, RGB fontColor) {
 }
 
 void printHead(char* headline) {
-  setFont(SMALL, yellowColor, yellowColor);
+  setFont(SMALL, orangeColor, orangeColor);
   myGLCD.fillRect (1, 1, 318, 14);
   myGLCD.setColor(blackColor.r, blackColor.g, blackColor.b);
   myGLCD.print(headline, CENTER, 1);
@@ -397,7 +396,7 @@ void timeStampInitial() {
 
   setFont(SMALL, blackColor, whiteColor);
 
-  myGLCD.print(rtc.getTimeStr(FORMAT_LONG), 20, 223);//Display date
+  myGLCD.print(rtc.getTimeStr(FORMAT_LONG), 20, 223);//Display Time
 
   myGLCD.print(rtc.getDateStr(FORMAT_LONG, FORMAT_LITTLEENDIAN, '/'), 100, 223); //Display date
 }
@@ -426,7 +425,7 @@ void mainScreen(boolean refreshAll = false) {
     myGLCD.drawLine(176, 45 , 176 , 219);
 
     setFont(SMALL, greenLightColor, blackColor);
-    myGLCD.print("Terrardino terrarium controler v.0.1", CENTER, 1);
+    myGLCD.print("Terrardino terrarium controler v.1.0", CENTER, 1);
     setFont(SMALL, blackColor, whiteColor);
     myGLCD.print("Control Terrario", 100, 20);
 
@@ -462,7 +461,7 @@ void mainScreen(boolean refreshAll = false) {
   myGLCD.printNumF( tempTerrarium, 1, 70, yTempHum + 50);
 
 
-  if (isCoolerOnOff) {
+  if (isCoolerOn) {
     myGLCD.drawBitmap(xIcon, yIcon, iconSize, iconSize, Fan_on_icon, 1);
   }
   else {
@@ -471,7 +470,7 @@ void mainScreen(boolean refreshAll = false) {
 
   rainSettingsButton.print();
 
-  if (isHeaterOnOff) {
+  if (isHeaterOn) {
     myGLCD.drawBitmap(xIcon + (iconSize * 2) + (iconOffset * 2) , yIcon, iconSize, iconSize, Heat_on_icon, 1);
   }
   else {

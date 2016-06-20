@@ -33,12 +33,12 @@ void temperatureScreen (boolean refreshAll=false){
 void checkTemp(){
   tempTerrarium = dht.readTemperature();
 
-  if(tempTerrarium < (setTempTerrarium + offTempTerrarium)){
-    isHeaterOnOff = true;
+  if(tempTerrarium < setTempTerrarium){
+    isHeaterOn = true;
     digitalWrite(onOffCalPin, LOW);
   }
-  else{
-    isHeaterOnOff = false;
+  else if( tempTerrarium > (setTempTerrarium + offTempTerrarium)){
+    isHeaterOn = false;
     digitalWrite(onOffCalPin, HIGH);
   }  
 }
