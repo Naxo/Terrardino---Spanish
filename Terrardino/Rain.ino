@@ -223,6 +223,7 @@ void processRainSetupScreen() {
     rainScreen();
   } else if (cancelButton.pushed(x, y)) {
 
+    Serial.println("Cancel!");
     // If save and exit, set all timer to active (not modified more)
     for (int i = 0; i < 15; i++) {
       isRainTimerModify[i] = false;

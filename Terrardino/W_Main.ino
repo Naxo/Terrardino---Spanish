@@ -11,7 +11,7 @@ void processMyTouch() {
   x = myTouch.getX();
   y = myTouch.getY();
 
-  if (cancelButton.pushed(x, y) && (dispScreen != 0)) {
+  if (cancelButton.pushed(x, y) && (dispScreen != 0) && (dispScreen != 2)){
     readFromEEPROM();
     goToMainScreen();
   }

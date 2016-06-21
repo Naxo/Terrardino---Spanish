@@ -37,7 +37,6 @@ void checkRainTimers() {
     else
     {
       isRainOn[i] = false;
-      isRainTimerModify[i] = false;
     }
   }
 
